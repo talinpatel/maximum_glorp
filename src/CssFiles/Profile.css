@@ -1,0 +1,70 @@
+/* Main container styles */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* width: 700vh; */
+    background-color: #f0f0f0;
+    font-family: 'Courier New', monospace;
+  }
+  
+  /* profile box styles */
+  .profile-box {
+    height: 75vh;
+    width: 80vw;
+    border: 5px solid black;
+    padding: 40px;
+    background-color: white;
+  }
+  
+  /* Title styles */
+  .profile-title {
+    margin: 0 0 30px 0;
+    font-size: 4rem;
+    text-align: start;
+    text-transform: uppercase;
+  }
+
+  .profile-text {
+    font-size: 3rem;
+    text-align: start;
+    text-transform: uppercase;
+  }
+  
+  /* Input group styles */
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  /* Brutalist input styles */
+  .brutal-input {
+    width: 100%;
+    padding: 10px;
+    border: 3px solid black;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Brutalist button styles */
+  .brutal-button {
+    width: 100%;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  
+  .brutal-button:hover {
+    background-color: #333;
+  }
