@@ -10,7 +10,6 @@ export default () => (
           <Route index element={<Login />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Desktop" element={<Desktop />} />
-          <Route path="/Report" element={<Report />} />
         </Routes>
       </BrowserRouter>
       
