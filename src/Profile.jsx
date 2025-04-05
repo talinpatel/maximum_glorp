@@ -26,7 +26,7 @@ export default function Profile() {
             </div>
 
             <div className="profile-img-container">
-                <img src={profile_photo}/>
+                <img className="profile-img" src={profile_photo}/>
             </div>
 
         </div>
