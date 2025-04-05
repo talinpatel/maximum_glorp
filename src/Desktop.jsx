@@ -112,9 +112,9 @@ export default function BrutalistDesktop() {
 
       <div className="brutal-taskbar">
         {userName ? (
-          <div className="brutal-button">Welcome, {userName}!</div>
+          <div className="brutal-buttonD">Welcome, {userName}!</div>
         ) : (
-          <div className="brutal-button"> Welcome [No user name provided]!</div>
+          <div className="brutal-buttonD"> Welcome [No user name provided]!</div>
         )}
         
         <div className="brutal-clock">
