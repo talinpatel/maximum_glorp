@@ -9,7 +9,7 @@ export default function Profile({ onClose }) {
     name: "JOHN DOE",
     location: "SECTOR 7",
     reports: 42,
-    CI: 100
+    CI: 60 // Default to 20%
   });
 
   const nodeRef = React.useRef(null);
@@ -21,6 +21,26 @@ export default function Profile({ onClose }) {
       x: Math.max(0, Math.floor(Math.random() * maxX)),
       y: Math.max(0, Math.floor(Math.random() * maxY))
     };
+  };
+
+  // Smooth color transition from red to green
+  const getCIColor = (ci) => {
+    const hue = ci * 1.2; // 0-120 (red to green)
+    return `hsl(${hue}, 100%, 50%)`;
+  };
+
+  // Continuous status text with smooth transitions
+  const getStatusText = (ci) => {
+    if (ci < 10) return "DANGEROUSLY NON-COMPLIANT";
+    if (ci < 20) return "SEVERELY NON-COMPLIANT";
+    if (ci < 30) return "NON-COMPLIANT";
+    if (ci < 40) return "MINIMALLY COMPLIANT";
+    if (ci < 50) return "PARTIALLY COMPLIANT";
+    if (ci < 60) return "MODERATELY COMPLIANT";
+    if (ci < 70) return "COMPLIANT";
+    if (ci < 80) return "HIGHLY COMPLIANT";
+    if (ci < 90) return "EXEMPLARY COMPLIANCE";
+    return "PERFECT COMPLIANCE";
   };
 
   return (
@@ -60,16 +80,26 @@ export default function Profile({ onClose }) {
                 <span className="profile-data-value">{userData.reports}</span>
               </div>
 
-              <div className="profile-data-row">
-                <span className="profile-data-label">COMPLIANCE INDEX:</span>
-                <span className="profile-data-value">{userData.CI}</span>
+              <div className="profile-ci-container">
+                <div className="profile-data-label">COMPLIANCE INDEX:</div>
+                <div className="ci-bar-container">
+                  <div 
+                    className="ci-bar"
+                    style={{
+                      width: `${userData.CI}%`,
+                      backgroundColor: getCIColor(userData.CI)
+                    }}
+                  >
+                    <span className="ci-value">{userData.CI}%</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="profile-footer">
-          <span>STATUS: VERIFIED CITIZEN</span>
+        <div className="profile-footer" style={{ color: getCIColor(userData.CI) }}>
+          <span>{getStatusText(userData.CI)}</span>
         </div>
       </div>
     </Draggable>
