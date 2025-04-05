@@ -7,9 +7,32 @@ export default function Login() {
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/Desktop", { state: { userName: name } });
+
+    try{
+      console.log("handleSubmit")
+      const response = await fetch("/",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({name: name})
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (response.ok) {
+        // Only navigate after successful response
+        navigate("/Desktop", { state: { userName: name } });
+      } else {
+        console.error("Failed to login:", data);
+      }
+
+    } catch(error){
+      console.error("Error during login:", error);
+    }
   };
 
   return (
