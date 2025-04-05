@@ -69,15 +69,20 @@
     box-sizing: border-box;
   }
   
-  .brutal-button {
+  .brutal-buttonD {
     padding: 10px 15px;
     border: 2px solid black;
     margin-right: 20px;
     cursor: pointer;
     background-color: black;
     font-size: 16px;
+    width: 90%;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
   }
-  
+
   .taskbar-items {
     display: flex;
     gap: 10px;
