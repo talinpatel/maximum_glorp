@@ -1,9 +1,7 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import "./CssFiles/Desktop.css";
-
 import Profile from './Profile'
 import News from './News'
 import Report from './Report'
@@ -26,6 +24,7 @@ export default function Desktop() {
       <Helmet>
           <title>Desktop</title>
       </Helmet>
+      BEANS
     </div>
   );
 }
