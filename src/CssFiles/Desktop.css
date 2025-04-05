@@ -1,0 +1,121 @@
+/* BRUTALIST DESIGN PRINCIPLES */
+.brutal-desktop {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    color: black;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    overflow: hidden;
+    position: fixed;
+}
+
+.desktop-area {
+    width: calc(100% - 20px); /* Adjusted to account for padding */
+    height: calc(100% - 68px);
+    position: relative;
+    background-color: white;
+    border: 5px solid black;
+    box-sizing: border-box;
+    margin: 0 5px; /* Added to match taskbar alignment */
+}
+
+.brutal-taskbar {
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 10px); /* Match desktop-area width */
+    height: 60px;
+    background-color: #fff;
+    color: #000;
+    display: flex;
+    align-items: center;
+    padding: 0 5px; /* Reduced padding to match desktop-area */
+    border-top: 4px solid #fff;
+    box-sizing: border-box;
+    margin: 0 5px; /* Added to match desktop-area */
+}
+
+
+/* Keep all other existing styles the same */
+.brutal-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+    cursor: move;
+    user-select: none;
+    position: absolute;
+}
+
+.icon-frame {
+    font-size: 32px;
+    padding: 10px;
+    border: 3px solid #fff;
+    margin-bottom: 5px;
+    border: 4px solid black;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brutal-label {
+    font-size: 14px;
+    text-align: center;
+    padding: 3px;
+    background-color: white;
+    border: 2px solid black;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.brutal-buttonD {
+    padding: 10px 15px;
+    border: 2px solid black;
+    margin-right: 5px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.brutal-clock {
+    padding: 10px 15px;
+    border: 3px solid black;
+    background-color: black;
+    font-size: 14px;
+    color: white;
+    margin-left: auto;
+    /* New positioning to align with desktop-area edge */
+    position: relative;
+    right: 5px; /* Adjust this value as needed */
+}
+
+.assistant-button {
+    padding: 10px 15px;
+    border: 3px solid black;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    flex-grow: 1;
+    text-align: center;
+    white-space: nowrap;
+    min-width: max-content;
+    border-radius: 0px;
+}
+
+/* Active state style */
+.assistant-button.active {
+    background-color: white;
+    color: black;
+}

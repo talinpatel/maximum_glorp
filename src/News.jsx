@@ -5,7 +5,7 @@ export default function News() {
 
   return (
     <div className="News">
-        News
+        Internet
     </div>
   );
 }
