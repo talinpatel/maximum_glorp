@@ -69,9 +69,6 @@ export default function News({ onClose }) {
       handle=".news-header"
     >
       <div className="news-container" ref={nodeRef}>
-        <Helmet>
-          <title>Ministry of Information</title>
-        </Helmet>
         
         <div className="news-header">
           <button className="news-close-btn" onClick={onClose}>X</button>
