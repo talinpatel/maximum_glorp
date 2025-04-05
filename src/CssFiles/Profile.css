@@ -17,6 +17,20 @@
     padding: 40px;
     background-color: white;
   }
+  .profile-text-container{
+    align-items: start;
+    align-self: start;
+    display: grid;
+  }
+  .profile-img-container{
+    display: grid;
+  }
+
+  .profle-img{
+    /* src: "./images/profile_photo.webp"; */
+    width: 10vh;
+    height: 10vh;
+  }
   
   /* Title styles */
   .profile-title {
