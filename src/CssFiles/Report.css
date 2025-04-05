@@ -1,82 +1,124 @@
-/* Main container styles */
-.report-container {
+.brutal-boxR {
+    width: 340px;
+    border: 5px solid #000;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', monospace;
+    margin: 20px;
+    position:absolute
+  }
+  
+  .brutal-headerR {
+    background: #000;
+    color: #fff;
+    padding: 15px;
+    border-bottom: 5px solid #000;
+  }
+  
+  .brutal-titleR {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  
+  .brutal-contentR {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #fff;
+  }
+  
+  .brutal-input-groupR {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .brutal-input-groupR label {
+    font-weight: 900;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  
+  .brutal-inputR {
+    width: 100%;
+    padding: 8px;
+    border: 3px solid #000;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    box-sizing: border-box;
+  }
+  
+  .brutal-textareaR {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .brutal-commandsR {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: white;
-    font-family: 'Courier New', monospace;
-  }
-
-  .report-information-container {
-    display: flex;
-    justify-content: start;
-    align-items: start;
-    min-height: 300px;
-    min-width: 450px;
-    background-color: white;
-    font-family: 'Courier New', monospace;
+    margin-top: 10px;
   }
   
-  /* Login box styles */
-  .report-box {
-    border: 5px solid black;
-    padding: 40px;
-    background-color: white;
-    height: 65vh;
-    width: 75vw;
+  .brutal-buttonR {
+    padding: 12px 18px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-weight: 900;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.1s;
   }
   
-  /* Title styles */
-  .report-title {
-    margin: 0 0 30px 0;
-    font-size: 2.5rem;
+  .brutal-buttonR:hover {
+    background: #fff;
+    color: #000;
+    outline: 3px solid #000;
+  }
+  
+  .brutal-footerR {
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-top: 5px solid #000;
     text-align: center;
     text-transform: uppercase;
   }
-  
-  /* Input group styles */
-  .input-group {
-    min-height: 300px;
-    min-width: 450px;
-    background-color: white;
-    margin-left: 110px;
-  }
-  
-  .input-group label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 3px;
-    font-weight: bold;
-  }
-  
-  /* Brutalist input styles */
-  .brutal-input {
-    width: 70%;
-    padding: 50px;
-    border: 3px solid black;
-    font-size: 1rem;
-    box-sizing: border-box;
-    font-family: 'Courier New', monospace;
-    resize: none;
-  }
-  
-  /* Brutalist button styles */
-  .brutal-button {
-    width: 180px;
-    height: 50px;
-    padding: 10px;
-    background-color: black;
-    color: white;
-    border: none;
-    font-size: 1rem;
+  .brutal-closeR {
+    position: absolute;
+    left: 10px;
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    width: 24px;
+    height: 24px;
     font-weight: bold;
     cursor: pointer;
-    text-transform: uppercase;
-    margin-top: 20px;
-    margin-left: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
   
-  .brutal-button:hover {
-    background-color: #333;
+  .brutal-closeR:hover {
+    background: #f00;
+    color: #000;
+  }
+  
+  .brutal-headerR {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
