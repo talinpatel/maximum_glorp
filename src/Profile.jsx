@@ -8,7 +8,8 @@ export default function Profile({ onClose }) {
   const [userData] = useState({
     name: "JOHN DOE",
     location: "SECTOR 7",
-    reports: 42
+    reports: 42,
+    CI: 100
   });
 
   const nodeRef = React.useRef(null);
@@ -57,6 +58,11 @@ export default function Profile({ onClose }) {
               <div className="profile-data-row">
                 <span className="profile-data-label">REPORTS:</span>
                 <span className="profile-data-value">{userData.reports}</span>
+              </div>
+
+              <div className="profile-data-row">
+                <span className="profile-data-label">COMPLIANCE INDEX:</span>
+                <span className="profile-data-value">{userData.CI}</span>
               </div>
             </div>
           </div>
