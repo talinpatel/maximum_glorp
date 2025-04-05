@@ -7,6 +7,8 @@ import Profile from './Profile';
 import News from './News';
 import Report from './Report';
 import Internet from './Internet';
+import Assistant from './Assistant';
+
 
 export default function BrutalistDesktop() {
   const location = useLocation();
@@ -14,7 +16,23 @@ export default function BrutalistDesktop() {
   const [activeApps, setActiveApps] = useState([]);
   const nodeRefs = useRef({});
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [assistantActive, setAssistantActive] = useState(false);
+  const [assistantActive, setAssistantActive] = useState(true);
+
+    // Add keyboard event listener for spacebar
+    useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault(); // Prevent default spacebar behavior (scrolling)
+          setAssistantActive(prev => !prev);
+        }
+      };
+  
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }, []);
+
 
   const [Apps] = useState([
     { id: 0, name: "NEWS", icon: '📰' },
@@ -123,6 +141,7 @@ export default function BrutalistDesktop() {
         {activeApps.includes("PROFILE") && <Profile />}
         {activeApps.includes("REPORT") && <Report />}
         {activeApps.includes("NET") && <Internet />}
+        {assistantActive && <Assistant />}
       </div>
 
       <div className="brutal-taskbar">
