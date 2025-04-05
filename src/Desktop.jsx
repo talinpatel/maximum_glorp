@@ -14,6 +14,7 @@ export default function BrutalistDesktop() {
   const [activeApps, setActiveApps] = useState([]);
   const nodeRefs = useRef({});
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [assistantActive, setAssistantActive] = useState(false);
 
   const [Apps] = useState([
     { id: 0, name: "NEWS", icon: '📰' },
@@ -33,13 +34,23 @@ export default function BrutalistDesktop() {
     return initialPositions;
   });
 
-  // Set up timer interval
+  const getFutureDate = () => {
+    const now = new Date();
+    return new Date(
+      2080,
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    );
+  };
+
   useEffect(() => {
     const timerID = setInterval(() => {
-      setCurrentTime(new Date());
+      setCurrentTime(getFutureDate());
     }, 1000);
 
-    // Clean up interval on component unmount
     return () => {
       clearInterval(timerID);
     };
@@ -69,6 +80,10 @@ export default function BrutalistDesktop() {
 
   const handleDoubleClick = (appName) => {
     openApp(appName);
+  };
+
+  const toggleAssistant = () => {
+    setAssistantActive(!assistantActive);
   };
 
   return (
@@ -117,8 +132,16 @@ export default function BrutalistDesktop() {
           <div className="brutal-buttonD"> Welcome [No user name provided]!</div>
         )}
         
+        <button 
+          className={`assistant-button ${assistantActive ? 'active' : ''}`}
+          onClick={toggleAssistant}
+          style={{ marginLeft: 'auto', marginRight: '10px' }}
+        >
+          {assistantActive ? "DEACTIVATE ASSISTANT" : "ACTIVATE ASSISTANT"}
+        </button>
+        
         <div className="brutal-clock">
-          [{currentTime.toLocaleTimeString()}]
+          [{currentTime.toLocaleDateString()} {currentTime.toLocaleTimeString()}]
         </div>
       </div>
     </div>
