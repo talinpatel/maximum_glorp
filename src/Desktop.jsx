@@ -9,7 +9,6 @@ import Report from './Report';
 import Internet from './Internet';
 import Assistant from './Assistant';
 
-
 export default function BrutalistDesktop() {
   const location = useLocation();
   const { userName } = location.state || {};
@@ -18,21 +17,26 @@ export default function BrutalistDesktop() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [assistantActive, setAssistantActive] = useState(true);
 
-    // Add keyboard event listener for spacebar
-    useEffect(() => {
-      const handleKeyDown = (e) => {
-        if (e.code === 'Space') {
-          e.preventDefault(); // Prevent default spacebar behavior (scrolling)
-          setAssistantActive(prev => !prev);
-        }
-      };
+  // Add keyboard event listener for spacebar
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Check if the focused element is an input or textarea
+      const focusedElement = document.activeElement;
+      const isTextInput = focusedElement.tagName === 'INPUT' || 
+                         focusedElement.tagName === 'TEXTAREA' ||
+                         focusedElement.isContentEditable;
+      
+      if (e.code === 'Space' && !isTextInput) {
+        e.preventDefault();
+        setAssistantActive(prev => !prev);
+      }
+    };
   
-      window.addEventListener('keydown', handleKeyDown);
-      return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    }, []);
-
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   const [Apps] = useState([
     { id: 0, name: "NEWS", icon: '📰' },
@@ -68,10 +72,7 @@ export default function BrutalistDesktop() {
     const timerID = setInterval(() => {
       setCurrentTime(getFutureDate());
     }, 1000);
-
-    return () => {
-      clearInterval(timerID);
-    };
+    return () => clearInterval(timerID);
   }, []);
 
   useEffect(() => {
@@ -102,6 +103,10 @@ export default function BrutalistDesktop() {
 
   const toggleAssistant = () => {
     setAssistantActive(!assistantActive);
+  };
+
+  const closeApp = (appName) => {
+    setActiveApps(activeApps.filter(app => app !== appName));
   };
 
   return (
@@ -137,10 +142,10 @@ export default function BrutalistDesktop() {
           );
         })}
 
-        {activeApps.includes("NEWS") && <News />}
-        {activeApps.includes("PROFILE") && <Profile />}
-        {activeApps.includes("REPORT") && <Report />}
-        {activeApps.includes("NET") && <Internet />}
+        {activeApps.includes("NEWS") && <News onClose={() => closeApp("NEWS")} />}
+        {activeApps.includes("PROFILE") && <Profile onClose={() => closeApp("PROFILE")} />}
+        {activeApps.includes("REPORT") && <Report onClose={() => closeApp("REPORT")} />}
+        {activeApps.includes("NET") && <Internet onClose={() => closeApp("NET")} />}
         {assistantActive && <Assistant />}
       </div>
 

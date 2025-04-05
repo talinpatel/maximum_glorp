@@ -14,9 +14,6 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <Helmet>
-          <title>Login</title>
-      </Helmet>
 
       <div className="login-box">
         <h1 className="login-title">LOGIN</h1>
