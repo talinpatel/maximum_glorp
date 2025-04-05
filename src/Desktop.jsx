@@ -1,14 +1,17 @@
-import React from "react"
+import React from "react";
+import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import "./CssFiles/Desktop.css";
 
-export default function Login() {
+export default function Desktop() {
+  const location = useLocation();
+  const { userName } = location.state || {};
 
   return (
-    <>
-    <Helmet>
-        <title>Desktop</title>
-    </Helmet>
-    hello Desktop
-    </>
+    <div className="desktop">
+      <Helmet>
+          <title>Desktop</title>
+      </Helmet>
+    </div>
   );
 }
