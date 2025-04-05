@@ -1,7 +1,6 @@
 import React from "react"
 import Login from "./Login";
 import Desktop from "./Desktop";
-import Report from "./Report";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 export default () => (
   <>
@@ -10,7 +9,6 @@ export default () => (
           <Route index element={<Login />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Desktop" element={<Desktop />} />
-          <Route path="/Report" element={<Report />} />
         </Routes>
       </BrowserRouter>
       
