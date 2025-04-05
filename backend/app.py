@@ -5,7 +5,7 @@ import os
 env = os.getenv("APP_ENVIRONMENT", "Development")
 
 app = Flask(__name__, static_folder='../dist') # after building, frontend is stored in dist folder
-
+ 
 if env == "Production":
     app.config["DEBUG"] = False
     app.config["DEVELOPMENT"] = False
