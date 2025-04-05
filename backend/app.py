@@ -4,8 +4,8 @@ import os
 
 env = os.getenv("APP_ENVIRONMENT", "Development")
 
-app = Flask(__name__, static_folder='../dist') # after building, frontend is stored in dist folder
- 
+app = Flask(__name__, static_folder='../dist', static_url_path="") # after building, frontend is stored in dist folder
+
 if env == "Production":
     app.config["DEBUG"] = False
     app.config["DEVELOPMENT"] = False
@@ -19,6 +19,14 @@ elif env == "Development":
     app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def serve():
+    return send_from_directory(app.static_folder, "index.html")
 
+@app.route("/<path:path>")
+def serve_react_app(path):
+    if os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, "index.html")
+
+if __name__ == '__main__':
+   app.run(host='0.0.0.0', port=5000)
