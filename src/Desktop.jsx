@@ -5,6 +5,9 @@ export default function Login() {
 
   return (
     <>
+    <Helmet>
+        <title>Desktop</title>
+    </Helmet>
     hello Desktop
     </>
   );
