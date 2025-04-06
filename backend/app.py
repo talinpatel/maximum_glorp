@@ -8,6 +8,9 @@ from flask import *
 import os
 import mysql.connector
 from flask_cors import CORS
+from agent import Assistant, Controller
+
+
 # needed because front and back are on diff ports
 
 env = os.getenv("APP_ENVIRONMENT", "Development")
@@ -106,6 +109,12 @@ def serve_react_app(path):
     if os.path.exists(os.path.join(app.static_folder, path)):
         return send_from_directory(app.static_folder, path)
     return send_from_directory(app.static_folder, "index.html")
+
+@app.route('/tts')
+def start_tts():
+    ass = Assistant()
+    ass.run()
+
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port=5000)

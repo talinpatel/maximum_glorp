@@ -13,13 +13,6 @@ compliance_index = 60
 report_count = 0
   
 
-<<<<<<< Updated upstream
-# use this one for accessibility?
-# could modify function to take in a text parameter from frontend
-def tts():
-    client = Neuphonic(api_key=os.environ.get('NEUPHONIC_API_KEY'))
-    sse = client.tts.SSEClient()
-=======
 class Assistant():
 # Load the API key from the environment
     def __init__(self, queue):
@@ -179,18 +172,15 @@ class Controller():
     def __init__(self):
         self.runFlag = False
         self.loopFlag = False
-        self.q = queue.Queue()
+        # self.q = queue.Queue()
         self.ass = Assistant(self.q)
         self.thread = Thread(target= lambda: asyncio.run(self.ass.main()))
         self.running = Event()
         self.running.set()
 
 
-    def get_loopFlag(self):
-        return self.loopFlag
-
-    def set_loopFlag(self, flag):
-        self.loopFlag = flag
+    def fuck_it_just_run(self):
+        asyncio.run(self.ass.main)
 
     def init_agent(self, **kwargs):
         for name, value in kwargs.items():
@@ -212,11 +202,11 @@ class Controller():
             self.q.put({"run": False})
             print("stopping...")
 
-    def loop(self):
-        while self.loopFlag == True:
-            self.runFlag = True
-            time.sleep(5)
-            self.runFlag = False
+    # def loop(self):
+    #     while self.loopFlag == True:
+    #         self.runFlag = True
+    #         time.sleep(5)
+    #         self.runFlag = False
 
 
 if __name__ == '__main__':
@@ -229,17 +219,16 @@ if __name__ == '__main__':
                    "running": True,
                    "reports": 5}
     cont.init_agent(**test_params)
-    cont.send_signal('start')
-    time.sleep(2)
-    cont.send_signal('update')
-    time.sleep(2)
-    cont.send_signal('pause')
+    # cont.send_signal('start')
+    # time.sleep(2)
+    # cont.send_signal('update')
+    # time.sleep(2)
+    # cont.send_signal('pause')
     # ass = Assistant()
     # thread = Thread(target= lambda: asyncio.run(ass.main()))
     # thread.start()
     # thread.join()
     # asyncio.run(ass.main())
->>>>>>> Stashed changes
     
     # TTSConfig is a pydantic model so check out the source code for all valid options
     tts_config = TTSConfig(
