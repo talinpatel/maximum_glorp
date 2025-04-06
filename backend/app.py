@@ -78,6 +78,14 @@ def submit_report():
         return jsonify({"status": "error", "message": str(e)}), 500
                         
 
+# def catch_all(path):
+#     return app.send_static_file('index.html')
+
+
+@app.route("/Desktop")
+def redirect_desktop():
+    return send_from_directory(app.static_folder, "index.html")
+
 
 @app.route("/", methods=["GET","POST"])
 def serve():
@@ -89,6 +97,7 @@ def serve():
     else:
         print("POST")
         data = request.get_json()
+        global name
         name = data.get("name")
         
         print(f"Received login from: {name}")
@@ -118,12 +127,12 @@ def start_tts():
     thread = threading.Thread(target= lambda: asyncio.run(ass.main()))
     thread.start()
     # asyncio.run(ass.main())
-    return redirect('/Desktop')
+    return redirect('/Desktop', 303)
 
-@app.route('/tts_end')
-def end_tts():
-    thread.join()
-    return redirect('/')
+# @app.route('/tts_end')
+# def end_tts():
+#     thread.join()
+#     return redirect('/')
 
 
 if __name__ == '__main__':
