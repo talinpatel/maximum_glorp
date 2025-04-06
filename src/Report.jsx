@@ -3,8 +3,8 @@ import Draggable from "react-draggable";
 import "./CssFiles/Report.css";
 import { Helmet } from "react-helmet";
 
-export default function Report({ onClose, complianceIndex, setComplianceIndex, traitorTracker, setTraitorTracker }) {
-  const [name, setReportName] = useState("");
+export default function Report({ userName, onClose }) {
+  const [reportee, setReportName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [specialNumbers, setSpecialNumbers] = useState(() => {
@@ -24,48 +24,36 @@ export default function Report({ onClose, complianceIndex, setComplianceIndex, t
     };
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the citizen is in the special numbers list
-    const isSpecialCitizen = specialNumbers.some((num) => name.includes(num));
+    try{
+      console.log("handleSubmit")
+      const response = await fetch("/submit_report",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({reporter: userName, reportee: reportee, date: date, description: description})
+      });
 
-    // Check if the selected date is in the year 2080
-    const isDateCorrect = date.startsWith("2080-");
+      console.log('before getting data');
+      const data = await response.json();
+      console.log('after getting data');
+      console.log(data);
 
-    let adjustment = 0;
+      if (response.ok) {
+        setReportName("");
+        setDate("");
+        setDescription("");
+        alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
+      } else {
+        console.error("Failed to submit report:", data);
+      }
 
-    if (isSpecialCitizen) {
-      adjustment = isDateCorrect ? 5 : 2;
-    } else {
-      adjustment = -5;
+    } catch(error){
+      console.error("Error during submitting report:", error);
     }
-
-    // Adjust compliance index
-    const newComplianceIndex = Math.max(0, Math.min(100, complianceIndex + adjustment));
-    setComplianceIndex(newComplianceIndex);
-
-    // Store the updated compliance index in localStorage
-    localStorage.setItem("complianceIndex", newComplianceIndex);
-
-    // If the citizen is special, remove them from both special numbers and traitor tracker
-    if (isSpecialCitizen) {
-      const newSpecialNumbers = specialNumbers.filter((num) => !name.includes(num)); // Remove from special numbers
-      setSpecialNumbers(newSpecialNumbers); // Update the state with the new special numbers list
-
-      // Store the updated special numbers in localStorage
-      localStorage.setItem("specialNumbers", JSON.stringify(newSpecialNumbers));
-
-      const newTraitorTracker = traitorTracker.filter((citizen) => citizen !== name);
-      setTraitorTracker(newTraitorTracker); // Update traitor tracker
-    }
-
-    // Clear the input fields after submission
-    setReportName(""); // Clear the name
-    setDate(""); // Clear the date
-    setDescription(""); // Clear the description
-
-    alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
   };
 
   // Retrieve the compliance index from localStorage on component mount
@@ -106,7 +94,7 @@ export default function Report({ onClose, complianceIndex, setComplianceIndex, t
               <input
                 type="text"
                 className="brutal-inputR"
-                value={name}
+                value={reportee}
                 onChange={(e) => setReportName(e.target.value)}
                 required
               />

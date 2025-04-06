@@ -50,6 +50,31 @@ elif env == "Development":
     app.config["ASSETS_DEBUG"] = True
     app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+@app.post("/submit_report")  # Simplified POST decorator
+def submit_report():
+    data = request.get_json()
+
+    # id made when add to database
+    reporter = data.get('reporter')
+    reportee = data.get('reportee')
+    date = data.get('date')
+    description = data.get('description')
+
+    try:
+        execute_query(
+            """
+            INSERT INTO REPORTS (reporter, reportee, date, description)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (reporter, reportee, date, description)
+        )
+        return jsonify({"status": "success", "message": "Report submitted"})
+    except Exception as e:
+        print("Error saving report:", e)
+        return jsonify({"status": "error", "message": str(e)}), 500
+                        
+
+
 @app.route("/", methods=["GET","POST"])
 def serve():
     print("SERVE")
