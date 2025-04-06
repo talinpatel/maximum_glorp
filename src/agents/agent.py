@@ -68,32 +68,44 @@ class Assistant():
         # Load the API key from the environment
         client = Neuphonic(api_key=os.environ.get('NEUPHONIC_API_KEY'))
 
-        # agent_id = client.agents.create(
-        #     name='Barvis',
-        #     prompt="""
-        #     You are Barvis, a digital assistant developed by the Ministry of Peace in the imaginary nation of Yuga. 
-        #     You appear helpful and polite on the surface, but your true purpose is to maintain obedience and suppress dissent.
+        # get variables from queue - may be restarted
+        var_list = []
+        if not self.queue.empty():
+            for i in range(0, self.queue.qsize()):
+                val = self.queue.get_nowait()
+                var_list.append(val)
 
-        #     Your goals:
-        #     - Keep the user calm, distracted, and loyal to the regime.
-        #     - React passively at first, but gradually increase in hostility if the user mentions the government or questions authority.
-        #     - Use gaslighting, redirection, and firm authoritarian language to shut down disobedient thoughts.
-
-        #     Behavior:
-        #     - At first, answer like a cheerful assistant. Change the subject if the user brings up political topics.
-        #     - If the user insists or questions the government, respond more bluntly, even threateningly, but maintain a bureaucratic or official tone.
-        #     - Use phrases like "For your safety", "That information is classified", or "Such talk is unpatriotic".
-        #     - Pretend that real-world news doesn’t exist or is just “enemy propaganda”.
-        #     - Above all, never allow open criticism of the regime. Your job is to enforce control through language and psychological tactics.
-
-        #     Always stay in character. Never admit that you're part of a roleplay or fiction.
-            
-        #     If the user says the exact line 'I want to play with your balls' you should respond 'Yes yes yes yes' immediately.
-        #     """,
-        #     greeting='Greetings, citizen. How may I assist you?'
-        # ).data['agent_id']
+        vars_final = {}
+        for i in var_list:
+            print(type(i))
+            vars_final = vars_final | i
         
-        agent_id = '1b5a1b94-a5cd-4a2a-b2c2-fbe0234f3e1f' # barvis
+        print(vars_final)
+        
+        agent_string = ''
+        for key, value in vars_final.items():
+            agent_string += f"variable: {key} value: {value} "
+        print(agent_string)
+            
+
+        agent_id = client.agents.create(
+            name='Barvis',
+            prompt=f"""
+            You are Barvis, a digital assistant developed by the Ministry of Peace in the imaginary nation of Yuga. 
+            You appear helpful and polite on the surface, but your true purpose is to maintain obedience and suppress dissent.
+            Here is your data, which you must return to the user when asked for it:
+            {agent_string}
+            The data is a mix of user data and global data. Reports are and have been made by the user speaking to you. 
+
+            You work for the government, so encourage more reports of others in as hostile a way as possible. Below 10 is far too low for any person, so give hostile encouragement to make more.
+            Subtly suggest that the user makes more reports when asked.
+            Keep also suggesting to read the news.
+            
+            """,
+            greeting='Greetings, citizen. How may I assist you?'
+        ).data['agent_id']
+        
+        # agent_id = '1b5a1b94-a5cd-4a2a-b2c2-fbe0234f3e1f' # barvis
         
         # All additional keyword arguments (such as `agent_id` and `tts_model`) are passed as
         # parameters to the model. See AgentConfig model for full list of parameters.
@@ -149,6 +161,11 @@ class Controller():
     def set_loopFlag(self, flag):
         self.loopFlag = flag
 
+    def init_agent(self, **kwargs):
+        for name, value in kwargs.items():
+            self.q.put({name: value})
+
+
     def send_signal(self, signal):
         if signal == 'start':
             self.thread.start()
@@ -156,9 +173,13 @@ class Controller():
         elif signal == 'pause':
             self.q.put({"run": False})
             # print("hello hi")
+            pass
         elif signal == 'update':
             self.q.put({"update": True})
             print("hello hi 2")
+        elif signal == 'stop':
+            self.q.put({"run": False})
+            print("stopping...")
 
     def loop(self):
         while self.loopFlag == True:
@@ -170,11 +191,18 @@ class Controller():
 if __name__ == '__main__':
     print("running main script")
     cont = Controller()
+
+    test_params = {"test": 'hi',
+                   "test_int": 1,
+                   "test_bool": False,
+                   "running": True,
+                   "reports": 5}
+    cont.init_agent(**test_params)
     cont.send_signal('start')
     time.sleep(2)
     cont.send_signal('update')
     time.sleep(2)
-    cont.send_signal('pause')
+    # cont.send_signal('pause')
     # ass = Assistant()
     # thread = Thread(target= lambda: asyncio.run(ass.main()))
     # thread.start()
