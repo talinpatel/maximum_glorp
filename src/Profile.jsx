@@ -1,17 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Draggable from "react-draggable";
 import "./CssFiles/Profile.css";
 import { Helmet } from "react-helmet";
 import profileImage from "./Assets/Eye.jpg";
 
-export default function Profile({ onClose }) {
-  const [userData] = useState({
-    name: "JOHN DOE",
-    location: "SECTOR 7",
-    reports: 42,
-    CI: 60 // Default to 20%
-  });
-
+export default function Profile({ onClose, complianceIndex }) {
   const nodeRef = React.useRef(null);
 
   const getRandomPosition = () => {
@@ -55,7 +48,7 @@ export default function Profile({ onClose }) {
           <button className="profile-close-btn" onClick={onClose}>X</button>
           <h1 className="profile-title">CITIZEN PROFILE</h1>
         </div>
-        
+
         <div className="profile-content-area">
           <div className="profile-image-container">
             <img 
@@ -63,21 +56,21 @@ export default function Profile({ onClose }) {
               alt="Citizen Profile" 
               className="profile-avatar"
             />
-            
+
             <div className="profile-data-section">
               <div className="profile-data-row">
                 <span className="profile-data-label">NAME:</span>
-                <span className="profile-data-value">{userData.name}</span>
+                <span className="profile-data-value">JOHN DOE</span>
               </div>
-              
+
               <div className="profile-data-row">
                 <span className="profile-data-label">LOCATION:</span>
-                <span className="profile-data-value">{userData.location}</span>
+                <span className="profile-data-value">SECTOR 7</span>
               </div>
-              
+
               <div className="profile-data-row">
                 <span className="profile-data-label">REPORTS:</span>
-                <span className="profile-data-value">{userData.reports}</span>
+                <span className="profile-data-value">42</span>
               </div>
 
               <div className="profile-ci-container">
@@ -86,20 +79,20 @@ export default function Profile({ onClose }) {
                   <div 
                     className="ci-bar"
                     style={{
-                      width: `${userData.CI}%`,
-                      backgroundColor: getCIColor(userData.CI)
+                      width: `${complianceIndex}%`,
+                      backgroundColor: getCIColor(complianceIndex)
                     }}
                   >
-                    <span className="ci-value">{userData.CI}%</span>
+                    <span className="ci-value">{complianceIndex}%</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-        <div className="profile-footer" style={{ color: getCIColor(userData.CI) }}>
-          <span>{getStatusText(userData.CI)}</span>
+
+        <div className="profile-footer" style={{ color: getCIColor(complianceIndex) }}>
+          <span>{getStatusText(complianceIndex)}</span>
         </div>
       </div>
     </Draggable>

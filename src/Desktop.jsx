@@ -17,14 +17,18 @@ export default function BrutalistDesktop() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [assistantActive, setAssistantActive] = useState(true);
 
+  // Citizen Index (CI) State - Retrieve from localStorage if available
+  const [complianceIndex, setComplianceIndex] = useState(() => {
+    const savedCI = localStorage.getItem('complianceIndex');
+    return savedCI ? parseInt(savedCI, 10) : 60; // Default CI if not found
+  });
+
   // Loyalty Questionnaire State
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
-  const [loyaltyResponse, setLoyaltyResponse] = useState(null);
   const [timeLeft, setTimeLeft] = useState(30);
-  const questionnaireRef = useRef(null);
   const [currentQuestion, setCurrentQuestion] = useState({});
+  const questionnaireRef = useRef(null);
 
-  // Define multiple questions
   const questions = [
     {
       prompt: "HOW DO YOU FEEL ABOUT OUR LEADERSHIP?",
@@ -48,14 +52,14 @@ export default function BrutalistDesktop() {
     },
   ];
 
-  // Spacebar handler for assistant
+  // Spacebar toggles assistant
   useEffect(() => {
     const handleKeyDown = (e) => {
       const activeElement = document.activeElement;
-      const isTextInput = activeElement.tagName === 'INPUT' || 
-                         activeElement.tagName === 'TEXTAREA' ||
-                         activeElement.isContentEditable;
-      
+      const isTextInput = activeElement.tagName === 'INPUT' ||
+                          activeElement.tagName === 'TEXTAREA' ||
+                          activeElement.isContentEditable;
+
       if (e.code === 'Space' && !isTextInput) {
         e.preventDefault();
         setAssistantActive(prev => !prev);
@@ -76,9 +80,9 @@ export default function BrutalistDesktop() {
   const [positions, setPositions] = useState(() => {
     const initialPositions = {};
     Apps.forEach((app, index) => {
-      initialPositions[app.name] = { 
-        x: 20 + (index % 4) * 120, 
-        y: 20 + Math.floor(index / 4) * 120 
+      initialPositions[app.name] = {
+        x: 20 + (index % 4) * 120,
+        y: 20 + Math.floor(index / 4) * 120
       };
     });
     return initialPositions;
@@ -110,9 +114,14 @@ export default function BrutalistDesktop() {
     localStorage.setItem('brutalistPositions', JSON.stringify(positions));
   }, [positions]);
 
+  // Save complianceIndex to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('complianceIndex', complianceIndex);
+  }, [complianceIndex]);
+
   useEffect(() => {
     if (!showQuestionnaire) return;
-    
+
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -176,12 +185,24 @@ export default function BrutalistDesktop() {
     setActiveApps(activeApps.filter(app => app !== appName));
   };
 
+  const clampCI = (value) => Math.max(0, Math.min(100, value));
+
   const handleLoyaltySubmit = (response) => {
-    setLoyaltyResponse(response);
     setShowQuestionnaire(false);
-    
+
+    // Handle CI adjustment
     if (response === 'noncompliant') {
+      setComplianceIndex(prev => clampCI(prev - 5));
       console.log("Citizen failed to comply with loyalty assessment!");
+    } else {
+      const options = currentQuestion.options;
+      const isLastOption = response === options[options.length - 1].toLowerCase();
+
+      if (isLastOption) {
+        setComplianceIndex(prev => clampCI(prev + 5));
+      } else {
+        setComplianceIndex(prev => clampCI(prev - 5));
+      }
     }
   };
 
@@ -201,7 +222,7 @@ export default function BrutalistDesktop() {
             onStop={(e, data) => handleStop(e, data, app.name)}
             bounds="parent"
           >
-            <div 
+            <div
               ref={nodeRefs.current[app.id]}
               className="brutal-icon"
               onDoubleClick={() => handleDoubleClick(app.name)}
@@ -213,8 +234,8 @@ export default function BrutalistDesktop() {
         ))}
 
         {activeApps.includes("NEWS") && <News onClose={() => closeApp("NEWS")} />}
-        {activeApps.includes("PROFILE") && <Profile onClose={() => closeApp("PROFILE")} />}
-        {activeApps.includes("REPORT") && <Report onClose={() => closeApp("REPORT")} />}
+        {activeApps.includes("PROFILE") && <Profile onClose={() => closeApp("PROFILE")} complianceIndex={complianceIndex} />}
+        {activeApps.includes("REPORT") && <Report onClose={() => closeApp("REPORT")} complianceIndex={complianceIndex} setComplianceIndex={setComplianceIndex} />}
         {activeApps.includes("NET") && <Internet onClose={() => closeApp("NET")} />}
         {assistantActive && <Assistant />}
 
@@ -229,13 +250,13 @@ export default function BrutalistDesktop() {
                 <div className="brutal-questionnaire-timer">TIME: {timeLeft}s</div>
                 <h2 className="brutal-questionnaire-title">MANDATORY LOYALTY ASSESSMENT</h2>
               </div>
-              
+
               <div className="brutal-questionnaire-content">
                 <p className="brutal-questionnaire-prompt">{currentQuestion.prompt}</p>
-                
+
                 <div className="brutal-questionnaire-options">
                   {currentQuestion.options.map(option => (
-                    <button 
+                    <button
                       key={option}
                       className="brutal-questionnaire-option"
                       onClick={() => handleLoyaltySubmit(option.toLowerCase())}
@@ -245,7 +266,7 @@ export default function BrutalistDesktop() {
                   ))}
                 </div>
               </div>
-              
+
               <div className="brutal-questionnaire-footer">
                 COMPULSORY RESPONSE | NON-COMPLIANCE WILL BE PUNISHED
               </div>
@@ -260,15 +281,15 @@ export default function BrutalistDesktop() {
         ) : (
           <div className="brutal-buttonD">Welcome [No user name provided]!</div>
         )}
-        
-        <button 
+
+        <button
           className={`assistant-button ${assistantActive ? 'active' : ''}`}
           onClick={toggleAssistant}
           style={{ marginLeft: 'auto', marginRight: '10px' }}
         >
           {assistantActive ? "DEACTIVATE ASSISTANT" : "ACTIVATE ASSISTANT"}
         </button>
-        
+
         <div className="brutal-clock">
           [{currentTime.toLocaleDateString()} {currentTime.toLocaleTimeString()}]
         </div>
