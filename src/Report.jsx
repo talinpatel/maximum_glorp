@@ -4,8 +4,8 @@ import Draggable from "react-draggable";
 import "./CssFiles/Report.css";
 import { Helmet } from "react-helmet";
 
-export default function Report({ userName, onClose }) {
-  const [reportee, setReportName] = useState("");
+export default function Report({ onClose, complianceIndex, setComplianceIndex, traitorTracker, setTraitorTracker }) {
+  const [name, setReportName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [specialNumbers, setSpecialNumbers] = useState(() => {
@@ -25,7 +25,7 @@ export default function Report({ userName, onClose }) {
     };
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     // Check if the reported name is "Hello"
@@ -107,7 +107,7 @@ export default function Report({ userName, onClose }) {
               <input
                 type="text"
                 className="brutal-inputR"
-                value={reportee}
+                value={name}
                 onChange={(e) => setReportName(e.target.value)}
                 required
               />
