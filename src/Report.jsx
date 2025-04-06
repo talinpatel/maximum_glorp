@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Draggable from "react-draggable";
 import "./CssFiles/Report.css";
 import { Helmet } from "react-helmet";
@@ -8,10 +9,10 @@ export default function Report({ userName, onClose }) {
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [specialNumbers, setSpecialNumbers] = useState(() => {
-    // Retrieve the special numbers from localStorage or use the default if not present
     const storedSpecialNumbers = localStorage.getItem("specialNumbers");
     return storedSpecialNumbers ? JSON.parse(storedSpecialNumbers) : ["1124", "3368", "4495", "5570"];
   });
+  const navigate = useNavigate(); // Add this for navigation
 
   const nodeRef = React.useRef(null);
 
@@ -27,36 +28,48 @@ export default function Report({ userName, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try{
-      console.log("handleSubmit")
-      const response = await fetch("/submit_report",{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({reporter: userName, reportee: reportee, date: date, description: description})
-      });
-
-      console.log('before getting data');
-      const data = await response.json();
-      console.log('after getting data');
-      console.log(data);
-
-      if (response.ok) {
-        setReportName("");
-        setDate("");
-        setDescription("");
-        alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
-      } else {
-        console.error("Failed to submit report:", data);
-      }
-
-    } catch(error){
-      console.error("Error during submitting report:", error);
+    // Check if the reported name is "Hello"
+    if (name === "C�TI�N-") {
+        navigate("/Ending", { 
+          state: { 
+            endingType: "bad",
+          } 
+        });
+        return;
     }
+
+    // Original logic for other names
+    const isSpecialCitizen = specialNumbers.some((num) => name.includes(num));
+    const isDateCorrect = date.startsWith("2080-");
+
+    let adjustment = 0;
+
+    if (isSpecialCitizen) {
+      adjustment = isDateCorrect ? 5 : 2;
+    } else {
+      adjustment = -5;
+    }
+
+    const newComplianceIndex = Math.max(0, Math.min(100, complianceIndex + adjustment));
+    setComplianceIndex(newComplianceIndex);
+    localStorage.setItem("complianceIndex", newComplianceIndex);
+
+    if (isSpecialCitizen) {
+      const newSpecialNumbers = specialNumbers.filter((num) => !name.includes(num));
+      setSpecialNumbers(newSpecialNumbers);
+      localStorage.setItem("specialNumbers", JSON.stringify(newSpecialNumbers));
+
+      const newTraitorTracker = traitorTracker.filter((citizen) => citizen !== name);
+      setTraitorTracker(newTraitorTracker);
+    }
+
+    setReportName("");
+    setDate("");
+    setDescription("");
+
+    alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
   };
 
-  // Retrieve the compliance index from localStorage on component mount
   useEffect(() => {
     const storedComplianceIndex = localStorage.getItem("complianceIndex");
     if (storedComplianceIndex) {
