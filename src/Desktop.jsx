@@ -49,6 +49,40 @@ export default function BrutalistDesktop() {
   ];
 
   // Spacebar handler for assistant
+  console.log('username is', userName);
+
+  // Loyalty Questionnaire State
+  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+  const [loyaltyResponse, setLoyaltyResponse] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const questionnaireRef = useRef(null);
+  const [currentQuestion, setCurrentQuestion] = useState({});
+
+  // Define multiple questions
+  const questions = [
+    {
+      prompt: "HOW DO YOU FEEL ABOUT OUR LEADERSHIP?",
+      options: ['GOOD', 'GREAT', 'FANTASTIC'],
+    },
+    {
+      prompt: "HOW LOYAL ARE YOU TO OUR GLORIOUS NATION?",
+      options: ['VERY LOYAL', 'EXTREMELY LOYAL', 'LOYAL WITHOUT QUESTION'],
+    },
+    {
+      prompt: "DO YOU TRUST THE INFORMATION PROVIDED BY OFFICIAL SOURCES?",
+      options: ['ABSOLUTELY', 'WITHOUT DOUBT', 'COMPLETELY'],
+    },
+    {
+      prompt: "WILL YOU REPORT ANY SUSPICIOUS ACTIVITY?",
+      options: ['IMMEDIATELY', 'WITHOUT HESITATION', 'AT ONCE'],
+    },
+    {
+      prompt: "HOW DO YOU VIEW DISSENTERS?",
+      options: ['WITH DISTRUST', 'WITH CONTEMPT', 'AS ENEMIES'],
+    },
+  ];
+
+  // Spacebar handler for assistant
   useEffect(() => {
     const handleKeyDown = (e) => {
       const activeElement = document.activeElement;
@@ -214,7 +248,7 @@ export default function BrutalistDesktop() {
 
         {activeApps.includes("NEWS") && <News onClose={() => closeApp("NEWS")} />}
         {activeApps.includes("PROFILE") && <Profile onClose={() => closeApp("PROFILE")} />}
-        {activeApps.includes("REPORT") && <Report onClose={() => closeApp("REPORT")} />}
+        {activeApps.includes("REPORT") && <Report userName={userName} onClose={() => closeApp("REPORT")} />}
         {activeApps.includes("NET") && <Internet onClose={() => closeApp("NET")} />}
         {assistantActive && <Assistant />}
 

@@ -3,8 +3,8 @@ import Draggable from "react-draggable";
 import "./CssFiles/Report.css";
 import { Helmet } from "react-helmet";
 
-export default function Report({ onClose }) {
-  const [name, setReportName] = useState("");
+export default function Report({ userName, onClose }) {
+  const [reportee, setReportName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const nodeRef = React.useRef(null);
@@ -18,12 +18,36 @@ export default function Report({ onClose }) {
     };
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setReportName("");
-    setDate("");
-    setDescription("");
-    alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
+
+    try{
+      console.log("handleSubmit")
+      const response = await fetch("/submit_report",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({reporter: userName, reportee: reportee, date: date, description: description})
+      });
+
+      console.log('before getting data');
+      const data = await response.json();
+      console.log('after getting data');
+      console.log(data);
+
+      if (response.ok) {
+        setReportName("");
+        setDate("");
+        setDescription("");
+        alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
+      } else {
+        console.error("Failed to submit report:", data);
+      }
+
+    } catch(error){
+      console.error("Error during submitting report:", error);
+    }
   };
   
   return (
@@ -46,7 +70,7 @@ export default function Report({ onClose }) {
               <input 
                 type="text" 
                 className="brutal-inputR"
-                value={name}
+                value={reportee}
                 onChange={(e) => setReportName(e.target.value)}
                 required
               />
