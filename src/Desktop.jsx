@@ -17,7 +17,38 @@ export default function BrutalistDesktop() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [assistantActive, setAssistantActive] = useState(true);
 
-  // Spacebar handler that ignores text inputs
+  // Loyalty Questionnaire State
+  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+  const [loyaltyResponse, setLoyaltyResponse] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const questionnaireRef = useRef(null);
+  const [currentQuestion, setCurrentQuestion] = useState({});
+
+  // Define multiple questions
+  const questions = [
+    {
+      prompt: "HOW DO YOU FEEL ABOUT OUR LEADERSHIP?",
+      options: ['GOOD', 'GREAT', 'FANTASTIC'],
+    },
+    {
+      prompt: "HOW LOYAL ARE YOU TO OUR GLORIOUS NATION?",
+      options: ['VERY LOYAL', 'EXTREMELY LOYAL', 'LOYAL WITHOUT QUESTION'],
+    },
+    {
+      prompt: "DO YOU TRUST THE INFORMATION PROVIDED BY OFFICIAL SOURCES?",
+      options: ['ABSOLUTELY', 'WITHOUT DOUBT', 'COMPLETELY'],
+    },
+    {
+      prompt: "WILL YOU REPORT ANY SUSPICIOUS ACTIVITY?",
+      options: ['IMMEDIATELY', 'WITHOUT HESITATION', 'AT ONCE'],
+    },
+    {
+      prompt: "HOW DO YOU VIEW DISSENTERS?",
+      options: ['WITH DISTRUST', 'WITH CONTEMPT', 'AS ENEMIES'],
+    },
+  ];
+
+  // Spacebar handler for assistant
   useEffect(() => {
     const handleKeyDown = (e) => {
       const activeElement = document.activeElement;
@@ -79,6 +110,47 @@ export default function BrutalistDesktop() {
     localStorage.setItem('brutalistPositions', JSON.stringify(positions));
   }, [positions]);
 
+  useEffect(() => {
+    if (!showQuestionnaire) return;
+    
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          handleLoyaltySubmit('noncompliant');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [showQuestionnaire]);
+
+  useEffect(() => {
+    const startInterval = () => {
+      const randomInterval = Math.floor(Math.random() * 120000) + 180000; // 3-5 min
+      return setTimeout(() => {
+        showRandomQuestionnaire();
+        startInterval();
+      }, randomInterval);
+    };
+
+    const initialDelay = Math.floor(Math.random() * 120000) + 180000;
+    const timer = setTimeout(() => {
+      showRandomQuestionnaire();
+      startInterval();
+    }, initialDelay);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const showRandomQuestionnaire = () => {
+    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    setCurrentQuestion(randomQuestion);
+    setShowQuestionnaire(true);
+    setTimeLeft(30);
+  };
+
   const openApp = (appName) => {
     if (!activeApps.includes(appName)) {
       setActiveApps([...activeApps, appName]);
@@ -102,6 +174,15 @@ export default function BrutalistDesktop() {
 
   const closeApp = (appName) => {
     setActiveApps(activeApps.filter(app => app !== appName));
+  };
+
+  const handleLoyaltySubmit = (response) => {
+    setLoyaltyResponse(response);
+    setShowQuestionnaire(false);
+    
+    if (response === 'noncompliant') {
+      console.log("Citizen failed to comply with loyalty assessment!");
+    }
   };
 
   return (
@@ -136,6 +217,41 @@ export default function BrutalistDesktop() {
         {activeApps.includes("REPORT") && <Report onClose={() => closeApp("REPORT")} />}
         {activeApps.includes("NET") && <Internet onClose={() => closeApp("NET")} />}
         {assistantActive && <Assistant />}
+
+        {showQuestionnaire && currentQuestion && (
+          <Draggable
+            bounds="parent"
+            handle=".brutal-questionnaire-header"
+            nodeRef={questionnaireRef}
+          >
+            <div className="brutal-questionnaire" ref={questionnaireRef}>
+              <div className="brutal-questionnaire-header">
+                <div className="brutal-questionnaire-timer">TIME: {timeLeft}s</div>
+                <h2 className="brutal-questionnaire-title">MANDATORY LOYALTY ASSESSMENT</h2>
+              </div>
+              
+              <div className="brutal-questionnaire-content">
+                <p className="brutal-questionnaire-prompt">{currentQuestion.prompt}</p>
+                
+                <div className="brutal-questionnaire-options">
+                  {currentQuestion.options.map(option => (
+                    <button 
+                      key={option}
+                      className="brutal-questionnaire-option"
+                      onClick={() => handleLoyaltySubmit(option.toLowerCase())}
+                    >
+                      [ {option} ]
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="brutal-questionnaire-footer">
+                COMPULSORY RESPONSE | NON-COMPLIANCE WILL BE PUNISHED
+              </div>
+            </div>
+          </Draggable>
+        )}
       </div>
 
       <div className="brutal-taskbar">

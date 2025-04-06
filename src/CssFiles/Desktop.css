@@ -119,3 +119,97 @@
     background-color: white;
     color: black;
 }
+/* Brutal Questionnaire Styles */
+.brutal-questionnaire {
+    width: 350px;
+    border: 5px solid #000;
+    background: #fff;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    z-index: 1000;
+    box-shadow: 8px 8px 0 #000;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .brutal-questionnaire-header {
+    background: #000;
+    color: #fff;
+    padding: 15px 12px;
+    border-bottom: 5px solid #000;
+    position: relative;
+    cursor: move;
+  }
+  
+  .brutal-questionnaire-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  
+  .brutal-questionnaire-timer {
+    position: absolute;
+    left: 15px;
+    top:85px;
+    font-weight: 900;
+    color: #f00;
+    animation: brutal-pulse 1s infinite;
+  }
+  
+  @keyframes brutal-pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+  
+  .brutal-questionnaire-content {
+    padding: 20px;
+    background: #fff;
+  }
+  
+  .brutal-questionnaire-prompt {
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #000;
+    padding-bottom: 10px;
+  }
+  
+  .brutal-questionnaire-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .brutal-questionnaire-option {
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .brutal-questionnaire-option:hover {
+    background: #fff;
+    color: #000;
+    outline: 3px solid #000;
+  }
+  
+  .brutal-questionnaire-footer {
+    padding: 10px;
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-top: 5px solid #000;
+    text-align: center;
+    text-transform: uppercase;
+  }

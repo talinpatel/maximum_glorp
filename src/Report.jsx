@@ -42,7 +42,7 @@ export default function Report({ onClose }) {
         <div className="brutal-contentR">
           <form onSubmit={handleSubmit}>
           <div className="brutal-input-groupR">
-              <label>REPORT NAME:</label>
+              <label>REPORT USER:</label>
               <input 
                 type="text" 
                 className="brutal-inputR"
