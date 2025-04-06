@@ -268,19 +268,82 @@ export default function Internet({ onClose }) {
 
   const renderRationsView = () => (
     <div className="net-full-view">
+      <div className="rations-header">
+        <h2>MINISTRY OF SUSTENANCE</h2>
+        <p className="rations-subheader">WEEKLY ALLOCATIONS - DISTRICT 7-B</p>
+      </div>
       <div className="rations-list">
-        <div className="ration-item">
-          <span className="ration-name">BASIC SUSTENANCE PACK</span>
-          <span className="ration-status">AVAILABLE</span>
+        {/* Basic Sustenance */}
+        <div className="ration-category">
+          <h3>BASIC SUSTENANCE</h3>
+          <div className="ration-item available">
+            <span className="ration-name">Standard Nutrient Paste</span>
+            <span className="ration-status">1500g</span>
+          </div>
+          <div className="ration-item available">
+            <span className="ration-name">Hydration Supplement</span>
+            <span className="ration-status">5L</span>
+          </div>
+          <div className="ration-item available">
+            <span className="ration-name">Caloric Supplement</span>
+            <span className="ration-status">300g</span>
+          </div>
         </div>
-        <div className="ration-item">
-          <span className="ration-name">VITAMIN SUPPLEMENT</span>
-          <span className="ration-status">AVAILABLE</span>
+  
+        {/* Health Supplements */}
+        <div className="ration-category">
+          <h3>HEALTH SUPPLEMENTS</h3>
+          <div className="ration-item available">
+            <span className="ration-name">Vitamin Complex</span>
+            <span className="ration-status">7 doses</span>
+          </div>
+          <div className="ration-item low">
+            <span className="ration-name">Mineral Boost</span>
+            <span className="ration-status">3 doses (Low Stock)</span>
+          </div>
+          <div className="ration-item unavailable">
+            <span className="ration-name">Immune Enhancer</span>
+            <span className="ration-status">UNAVAILABLE</span>
+          </div>
         </div>
-        <div className="ration-item">
-          <span className="ration-name">WORKER STIMULANT</span>
-          <span className="ration-status">UNAVAILABLE</span>
+  
+        {/* Worker Provisions */}
+        <div className="ration-category">
+          <h3>WORKER PROVISIONS</h3>
+          <div className="ration-item available">
+            <span className="ration-name">Stimulant Tablets</span>
+            <span className="ration-status">14 tablets</span>
+          </div>
+          <div className="ration-item unavailable">
+            <span className="ration-name">Performance Enhancer</span>
+            <span className="ration-status">UNAVAILABLE</span>
+          </div>
+          <div className="ration-item available">
+            <span className="ration-name">Muscle Recovery Serum</span>
+            <span className="ration-status">5 applications</span>
+          </div>
         </div>
+  
+        {/* Luxury Items */}
+        <div className="ration-category">
+          <h3>LOYALTY REWARDS</h3>
+          <div className="ration-item available">
+            <span className="ration-name">Flavor Enhancer Pack</span>
+            <span className="ration-status">2 packs</span>
+          </div>
+          <div className="ration-item unavailable">
+            <span className="ration-name">Synthetic Coffee</span>
+            <span className="ration-status">UNAVAILABLE</span>
+          </div>
+          <div className="ration-item low">
+            <span className="ration-name">Recreation Token</span>
+            <span className="ration-status">1 token (Low Stock)</span>
+          </div>
+        </div>
+      </div>
+      <div className="rations-footer">
+        <p>Next distribution: 2080-12-15</p>
+        <p className="warning-note">Allocations subject to change based on productivity metrics</p>
       </div>
     </div>
   );
