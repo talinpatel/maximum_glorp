@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import Draggable from "react-draggable";
 import "./CssFiles/Internet.css";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 export default function Internet({ onClose }) {
   const [url, setUrl] = useState("");
   const [currentView, setCurrentView] = useState("main");
   const [currentUrl, setCurrentUrl] = useState("");
+  const navigate = useNavigate();
   const [chatMessages, setChatMessages] = useState([
     { type: "system", text: "WELCOME TO LOYALTY CHAT ROOM 7-B" },
     { type: "system", text: "ALL MESSAGES ARE MONITORED BY THE MINISTRY" },
@@ -102,7 +104,15 @@ export default function Internet({ onClose }) {
     if (url) {
       const normalizedUrl = url.toLowerCase().trim();
       setCurrentUrl(url);
-      
+
+          if (normalizedUrl.includes("resistance")) {
+      navigate("/Ending", { 
+        state: { 
+          endingType: "good",
+        } 
+      });
+      return;
+    }
       if (normalizedUrl.includes("loyalty-chat")) {
         setCurrentView("chat");
       } else if (normalizedUrl.includes("traitor-tracker")) {
