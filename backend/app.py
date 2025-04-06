@@ -112,7 +112,7 @@ def serve():
             execute_query("INSERT INTO USERS (full_name) VALUES (%s)",(name.lower(),))
             # create new agent and store ID
         
-        return jsonify({"message": f"{name} accessed the system"})
+    return jsonify(f"{name} has accessed the system")
 
 @app.route("/<path:path>")
 def serve_react_app(path):
