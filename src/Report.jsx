@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Draggable from "react-draggable";
 import "./CssFiles/Report.css";
 import { Helmet } from "react-helmet";
@@ -8,10 +9,10 @@ export default function Report({ onClose, complianceIndex, setComplianceIndex, t
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [specialNumbers, setSpecialNumbers] = useState(() => {
-    // Retrieve the special numbers from localStorage or use the default if not present
     const storedSpecialNumbers = localStorage.getItem("specialNumbers");
     return storedSpecialNumbers ? JSON.parse(storedSpecialNumbers) : ["1124", "3368", "4495", "5570"];
   });
+  const navigate = useNavigate(); // Add this for navigation
 
   const nodeRef = React.useRef(null);
 
@@ -27,10 +28,18 @@ export default function Report({ onClose, complianceIndex, setComplianceIndex, t
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if the citizen is in the special numbers list
-    const isSpecialCitizen = specialNumbers.some((num) => name.includes(num));
+    // Check if the reported name is "Hello"
+    if (name === "C�TI�N-") {
+        navigate("/Ending", { 
+          state: { 
+            endingType: "bad",
+          } 
+        });
+        return;
+    }
 
-    // Check if the selected date is in the year 2080
+    // Original logic for other names
+    const isSpecialCitizen = specialNumbers.some((num) => name.includes(num));
     const isDateCorrect = date.startsWith("2080-");
 
     let adjustment = 0;
@@ -41,34 +50,26 @@ export default function Report({ onClose, complianceIndex, setComplianceIndex, t
       adjustment = -5;
     }
 
-    // Adjust compliance index
     const newComplianceIndex = Math.max(0, Math.min(100, complianceIndex + adjustment));
     setComplianceIndex(newComplianceIndex);
-
-    // Store the updated compliance index in localStorage
     localStorage.setItem("complianceIndex", newComplianceIndex);
 
-    // If the citizen is special, remove them from both special numbers and traitor tracker
     if (isSpecialCitizen) {
-      const newSpecialNumbers = specialNumbers.filter((num) => !name.includes(num)); // Remove from special numbers
-      setSpecialNumbers(newSpecialNumbers); // Update the state with the new special numbers list
-
-      // Store the updated special numbers in localStorage
+      const newSpecialNumbers = specialNumbers.filter((num) => !name.includes(num));
+      setSpecialNumbers(newSpecialNumbers);
       localStorage.setItem("specialNumbers", JSON.stringify(newSpecialNumbers));
 
       const newTraitorTracker = traitorTracker.filter((citizen) => citizen !== name);
-      setTraitorTracker(newTraitorTracker); // Update traitor tracker
+      setTraitorTracker(newTraitorTracker);
     }
 
-    // Clear the input fields after submission
-    setReportName(""); // Clear the name
-    setDate(""); // Clear the date
-    setDescription(""); // Clear the description
+    setReportName("");
+    setDate("");
+    setDescription("");
 
     alert("REPORT SUBMITTED. THANK YOU FOR YOUR LOYALTY, CITIZEN.");
   };
 
-  // Retrieve the compliance index from localStorage on component mount
   useEffect(() => {
     const storedComplianceIndex = localStorage.getItem("complianceIndex");
     if (storedComplianceIndex) {
