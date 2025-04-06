@@ -12,35 +12,36 @@ export default function Internet({ onClose }) {
     { type: "system", text: "ALL MESSAGES ARE MONITORED BY THE MINISTRY" },
     
     // Opening exchanges
-    { user: "CITIZEN-4582", text: "Praise our leaders! I've reported 3 violations this morning alone!" }, // Evil
-    { user: "CITIZEN-1124", text: "The new ration cards seem to be... malfunctioning more than usual" }, // Good (1)
-    { user: "CITIZEN-7821", text: "CITIZEN-1124, file a proper report instead of complaining!" }, // Evil
+    { user: "CITIZEN-4582", text: "Praise our leaders! I've reported 3 violations this morning alone!" },
+    { user: "CITIZEN-1124", text: "The new ration cards seem to be... malfunctioning more than usual" },
+    { user: "CITIZEN-7821", text: "CITIZEN-1124, file a proper report instead of complaining!" },
     
     // Mid-conversation cluster
-    { user: "CITIZEN-3094", text: "Production quotas increased by 15%! Glory to the Ministry!" }, // Evil
-    { user: "CITIZEN-3368", text: "Has anyone else noticed the ventilation systems failing during night shift?" }, // Good (2)
-    { user: "CITIZEN-6651", text: "All equipment functions at Ministry-approved levels" }, // Evil
-    { user: "CITIZEN-0023", text: "Compliance brings warmth! Discontent brings frost!" }, // Evil
+    { user: "CITIZEN-3094", text: "Production quotas increased by 15%! Glory to the Ministry!" },
+    { user: "CITIZEN-3368", text: "Has anyone else noticed the ventilation systems failing during night shift?" },
+    { user: "CITIZEN-6651", text: "All equipment functions at Ministry-approved levels" },
+    { user: "CITIZEN-0023", text: "Compliance brings warmth! Discontent brings frost!" },
     
     // Second cluster
-    { user: "CITIZEN-4495", text: "The educational films keep repeating the same 3 segments..." }, // Good (3)
-    { user: "CITIZEN-7821", text: "Repetition ensures proper ideological absorption!" }, // Evil
-    { user: "CITIZEN-9102", text: "Mandatory self-criticism session at 1900 hours!" }, // Evil
+    { user: "CITIZEN-4495", text: "The educational films keep repeating the same 3 segments..." },
+    { user: "CITIZEN-7821", text: "Repetition ensures proper ideological absorption!" },
+    { user: "CITIZEN-9102", text: "Mandatory self-criticism session at 1900 hours!" },
     
     // Later exchanges
-    { user: "CITIZEN-5570", text: "My productivity monitor deducts points when I blink too often" }, // Good (4)
-    { user: "CITIZEN-4582", text: "The Ministry's biometric standards are perfect!" }, // Evil
-    { user: "CITIZEN-1124", text: "The cafeteria portions shrank again... for our own nutrition optimization?" }, // Good (1 reappears)
-    { user: "CITIZEN-0023", text: "All allocations are scientifically determined!" }, // Evil
+    { user: "CITIZEN-5570", text: "My productivity monitor deducts points when I blink too often" },
+    { user: "CITIZEN-4582", text: "The Ministry's biometric standards are perfect!" },
+    { user: "CITIZEN-1124", text: "The cafeteria portions shrank again... for our own nutrition optimization?" },
+    { user: "CITIZEN-0023", text: "All allocations are scientifically determined!" },
     
     // Final messages
-    { user: "CITIZEN-3368", text: "The night shift lighting makes the warning posters hard to read..." }, // Good (2 reappears)
-    { user: "CITIZEN-6651", text: "Report for vision testing immediately CITIZEN-3368" }, // Evil
-    { user: "CITIZEN-4495", text: "The new history modules omit last year's harvest figures..." }, // Good (3 reappears)
-    { user: "CITIZEN-5570", text: "My badge reader approved me as CITIZEN-5507 today... glitch?" } // Good (4 reappears)
+    { user: "CITIZEN-3368", text: "The night shift lighting makes the warning posters hard to read..." },
+    { user: "CITIZEN-6651", text: "Report for vision testing immediately CITIZEN-3368" },
+    { user: "CITIZEN-4495", text: "The new history modules omit last year's harvest figures..." },
+    { user: "CITIZEN-5570", text: "My badge reader approved me as CITIZEN-5507 today... glitch?" }
   ]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
+  const [hasGreenMessage, setHasGreenMessage] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -48,6 +49,41 @@ export default function Internet({ onClose }) {
 
   useEffect(() => {
     scrollToBottom();
+  }, [chatMessages]);
+
+  // Check for empty specialNumbers in localStorage
+  useEffect(() => {
+    const checkSpecialNumbers = () => {
+      const specialNumbers = JSON.parse(localStorage.getItem('specialNumbers') || '[]');
+      const currentHasGreenMessage = chatMessages.some(msg => msg.user === "C�TI�N-");
+      
+      if (specialNumbers.length === 0) {
+        if (!currentHasGreenMessage) {
+          setChatMessages(prev => [
+            ...prev,
+            { 
+              user: "C�TI�N-", 
+              text: "Stop! Think about what you're doing! Its '𝑽𝒊𝒓𝒕𝒖𝒂𝒍 𝑰𝒏𝒔𝒕𝒂𝒏𝒊𝒕𝒚'. ",
+              className: "green-text" 
+            }
+          ]);
+          setHasGreenMessage(true);
+        }
+      } else {
+        if (currentHasGreenMessage) {
+          setChatMessages(prev => prev.filter(msg => msg.user !== "C�TI�N-"));
+          setHasGreenMessage(false);
+        }
+      }
+    };
+
+    // Initial check
+    checkSpecialNumbers();
+    
+    // Set up periodic checking
+    const interval = setInterval(checkSpecialNumbers, 1000);
+    
+    return () => clearInterval(interval);
   }, [chatMessages]);
 
   const nodeRef = React.useRef(null);
@@ -163,31 +199,35 @@ export default function Internet({ onClose }) {
     </div>
   );
 
-// In your Internet component
-const renderChatView = () => (
-  <div className="net-full-view">
-    <div className="chat-messages-container">
-      <div className="chat-messages-scroll">
-        {chatMessages.map((msg, index) => (
-          <div key={index} className={`message ${msg.type || ""}`}>
-            {msg.user && <span className="user">{msg.user}:</span>} {msg.text}
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
+  const renderChatView = () => (
+    <div className="net-full-view">
+      <div className="chat-messages-container">
+        <div className="chat-messages-scroll">
+          {chatMessages.map((msg, index) => (
+            <div key={index} className={`message ${msg.className || ""} ${msg.type || ""}`}>
+              {msg.user && (
+                <span className={`user ${msg.user === "C�TI�N-" ? "green-user" : ""}`}>
+                  {msg.user}:
+                </span>
+              )} 
+              {msg.text}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
+      <form onSubmit={handleSendMessage} className="chat-input-container">
+        <input 
+          type="text" 
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="TYPE MESSAGE (MONITORED)" 
+          className="chat-input"
+        />
+        <button type="submit" className="chat-send-btn">SEND</button>
+      </form>
     </div>
-    <form onSubmit={handleSendMessage} className="chat-input-container">
-      <input 
-        type="text" 
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="TYPE MESSAGE (MONITORED)" 
-        className="chat-input"
-      />
-      <button type="submit" className="chat-send-btn">SEND</button>
-    </form>
-  </div>
-);
+  );
 
   const renderTrackerView = () => (
     <div className="net-full-view">
@@ -262,7 +302,6 @@ const renderChatView = () => (
           <h1 className="net-title">GOVERNMENT NETWORK ACCESS</h1>
         </div>
         
-        {/* URL Bar */}
         {currentView !== "main" && (
           <div className="net-url-bar">
             <button 
