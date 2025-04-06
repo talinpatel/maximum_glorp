@@ -8,8 +8,9 @@ from flask import *
 import os
 import mysql.connector
 from flask_cors import CORS
-from agent import Assistant, Controller
-
+from agent import Assistant
+import asyncio
+import threading
 
 # needed because front and back are on diff ports
 
@@ -112,8 +113,17 @@ def serve_react_app(path):
 
 @app.route('/tts')
 def start_tts():
+    global thread
     ass = Assistant()
-    ass.run()
+    thread = threading.Thread(target= lambda: asyncio.run(ass.main()))
+    thread.start()
+    # asyncio.run(ass.main())
+    return redirect('/Desktop')
+
+@app.route('/tts_end')
+def end_tts():
+    thread.join()
+    return redirect('/')
 
 
 if __name__ == '__main__':

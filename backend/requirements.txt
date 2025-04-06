@@ -1,1 +1,6 @@
 flask
+flask-cors
+argent
+asyncio
+pyneuphonic
+

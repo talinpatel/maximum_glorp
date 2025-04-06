@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { redirect, Route, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Draggable from "react-draggable";
@@ -16,6 +17,7 @@ export default function BrutalistDesktop() {
   const nodeRefs = useRef({});
   const [currentTime, setCurrentTime] = useState(new Date());
   const [assistantActive, setAssistantActive] = useState(true);
+  const navigate = useNavigate();
 
   // Citizen Index (CI) State - Retrieve from localStorage if available
   const [complianceIndex, setComplianceIndex] = useState(() => {
@@ -179,6 +181,8 @@ export default function BrutalistDesktop() {
 
   const toggleAssistant = () => {
     setAssistantActive(!assistantActive);
+    navigate('/tts')
+    
   };
 
   const closeApp = (appName) => {
