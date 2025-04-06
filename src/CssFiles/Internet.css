@@ -524,5 +524,23 @@
     font-weight: 900;
     margin-left: 5px;
   }
+  /* Green text message styles */
+.message.green-text {
+    color: #00aa00;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    animation: pulse-green 2s infinite;
+  }
   
+  @keyframes pulse-green {
+    0% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.3); }
+    50% { text-shadow: 0 0 15px rgba(0, 255, 0, 0.7); }
+    100% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.3); }
+  }
+  
+  .user.green-user {
+    color: #00ff00;
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+  }
   /* Keep all other existing styles */

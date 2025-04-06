@@ -1,7 +1,7 @@
 import React from "react"
 import Login from "./Login";
 import Desktop from "./Desktop";
-import Report from "./Report";
+import Ending from "./Ending";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 export default () => (
   <>
@@ -10,6 +10,7 @@ export default () => (
           <Route index element={<Login />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Desktop" element={<Desktop />} />
+          <Route path="/Ending" element={<Ending />} />
         </Routes>
       </BrowserRouter>
       
