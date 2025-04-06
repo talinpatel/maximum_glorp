@@ -31,51 +31,6 @@ export default function Assistant({ onClose }) {
     return faceImages[Math.floor(Math.random() * faceImages.length)];
   };
 
-  const speak = (text) => {
-    window.speechSynthesis.cancel();
-    clearTimeout(wordTimerRef.current);
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 0.8;
-    
-    setIsSpeaking(true);
-    setCurrentMessage(text);
-    wordsRef.current = text.split(/\s+/);
-    currentWordIndexRef.current = 0;
-    
-    utterance.onboundary = (event) => {
-      if (event.name === 'word') {
-        currentWordIndexRef.current++;
-        setCurrentFace(getRandomFace());
-      }
-    };
-    
-    utterance.onstart = () => {
-      setCurrentFace(getRandomFace());
-    };
-    
-    utterance.onend = () => {
-      setIsSpeaking(false);
-      clearTimeout(wordTimerRef.current);
-      setCurrentFace(face1); // Reset to default face when done
-    };
-    
-    window.speechSynthesis.speak(utterance);
-    speechSynthRef.current = utterance;
-  };
-
-  const toggleSpeaking = () => {
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      clearTimeout(wordTimerRef.current);
-    } else {
-      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-      speak(randomMessage);
-    }
-  };
-
   const handleDragStop = (e, data) => {
     setPosition({ x: data.x, y: data.y });
   };
@@ -127,7 +82,6 @@ export default function Assistant({ onClose }) {
           <div className="brutal-commands">
             <button 
               className="brutal-button"
-              onClick={toggleSpeaking}
             >
               {isSpeaking ? "STOP SPEAKING" : "SPEAK"}
             </button>
