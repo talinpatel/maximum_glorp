@@ -215,6 +215,7 @@ async def main():
             print("...")
     except KeyboardInterrupt:
         await agent.stop()
+        client.agents.delete(agent_id)
 
 asyncio.run(main())
 
